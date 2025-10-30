@@ -1,0 +1,19 @@
+# Archivos de IDE
+.idea/
+*.iml
+
+# Archivos compilados de Java/Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Archivos comprimidos y carpetas de herramientas
+*.zip
+apache-maven-3.9.11-bin/
+
+# Archivos de log
+*.log
+
+# Dependencias de frontend (Angular)
+notes-frontend/node_modules/
+notes-frontend/dist/
+notes-frontend/.angular/

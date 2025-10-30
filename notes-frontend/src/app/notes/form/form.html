@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm">
+        
+        <h2 class="text-center mb-4">
+          {{ isEditMode ? 'Editar Nota' : 'Crear Nueva Nota' }}
+        </h2>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Título -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
+            <input 
+              type="text" 
+              id="title" 
+              class="form-control" 
+              formControlName="title"
+              [class.is-invalid]="noteForm.get('title')?.invalid && noteForm.get('title')?.touched">
+            <div *ngIf="noteForm.get('title')?.invalid && noteForm.get('title')?.touched" class="invalid-feedback">
+              El título es obligatorio.
+            </div>
+          </div>
+
+          <!-- Contenido -->
+          <div class="mb-3">
+            <label for="content" class="form-label">Contenido</label>
+            <textarea 
+              id="content" 
+              rows="6" 
+              class="form-control" 
+              formControlName="content"
+              [class.is-invalid]="noteForm.get('content')?.invalid && noteForm.get('content')?.touched"></textarea>
+            <div *ngIf="noteForm.get('content')?.invalid && noteForm.get('content')?.touched" class="invalid-feedback">
+              El contenido es obligatorio.
+            </div>
+          </div>
+
+          <!-- Checkbox Pública -->
+          <div class="mb-3 form-check">
+            <input 
+              type="checkbox" 
+              id="isPublic" 
+              class="form-check-input" 
+              formControlName="isPublic">
+            <label for="isPublic" class="form-check-label">Hacer esta nota pública</label>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="noteForm.invalid">
+              {{ isEditMode ? 'Guardar Cambios' : 'Crear Nota' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

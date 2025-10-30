@@ -1,0 +1,94 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Mis Notas y Notas Compartidas</h2>
+    <div>
+      <button class="btn btn-secondary me-2" (click)="logout()">Cerrar Sesión</button>
+      
+      <!-- CORRECCIÓN: Usar routerLink para navegar -->
+      <button class="btn btn-primary" [routerLink]="['/notes/create']">Crear Nueva Nota</button>
+    </div>
+  </div>
+
+  <!-- Mensaje de Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Lista de Notas -->
+  <div *ngIf="notes$ | async as notes; else loading">
+    <div *ngIf="notes.length > 0; else noNotes" class="list-group">
+      
+      <!-- Encabezado de la lista -->
+      <div class="list-group-item list-group-item-secondary d-none d-md-flex">
+        <div class="col-md-4"><strong>Título</strong></div>
+        <div class="col-md-3"><strong>Dueño</strong></div>
+        <div class="col-md-2"><strong>Visibilidad</strong></div>
+        <div class="col-md-3 text-end"><strong>Acciones</strong></div>
+      </div>
+
+      <!-- Itera sobre las notas -->
+      <div *ngFor="let note of notes" class="list-group-item list-group-item-action">
+        <div class="row align-items-center">
+          
+          <div class="col-12 col-md-4 mb-2 mb-md-0">
+            <strong class="d-md-none">Título: </strong>
+            <strong class="d-none d-md-block">{{ note.title }}</strong>
+            <p class="text-muted d-none d-md-block text-truncate">{{ note.content }}</p>
+          </div>
+          
+          <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <span class="d-md-none"><strong>Dueño: </strong></span>
+            <span>{{ note.ownerEmail === currentEmail ? 'Yo' : note.ownerEmail }}</span>
+          </div>
+          
+          <div class="col-12 col-md-2 mb-2 mb-md-0">
+            <span class="badge" [class.bg-success]="note.isPublic" [class.bg-secondary]="!note.isPublic">
+              {{ note.isPublic ? 'Pública' : 'Privada' }}
+            </span>
+          </div>
+          
+          <!-- Acciones -->
+          <div class="col-12 col-md-3 text-md-end">
+            
+            <!-- CORRECCIÓN: Botón Editar (usa routerLink) -->
+            <button 
+              class="btn btn-sm btn-outline-primary me-1"
+              [routerLink]="['/notes/edit', note.id]"
+              [disabled]="note.ownerEmail !== currentEmail">
+              Editar
+            </button>
+            
+            <!-- CORRECCIÓN: Botón Compartir (usa routerLink) -->
+            <button 
+              class="btn btn-sm btn-outline-info me-1"
+              [routerLink]="['/notes/share', note.id]"
+              [disabled]="note.ownerEmail !== currentEmail">
+              Compartir
+            </button>
+            
+            <!-- CORRECCIÓN: Botón Eliminar (usa note.id) -->
+            <button 
+              class="btn btn-sm btn-outline-danger" 
+              (click)="deleteNote(note.id)"
+              [disabled]="note.ownerEmail !== currentEmail">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plantilla de Carga -->
+  <ng-template #loading>
+    <div class="text-center">Cargando notas...</div>
+  </ng-template>
+
+  <!-- Plantilla de Notas Vacías -->
+  <ng-template #noNotes>
+    <div class="alert alert-info">
+      No tienes notas creadas, compartidas o públicas visibles.
+    </div>
+  </ng-template>
+
+</div>
